@@ -3,13 +3,15 @@ const pagination = paginationContainer.querySelector('.pagination');
 const prevBtn = paginationContainer.querySelector('.prev-btn');
 const nextBtn = paginationContainer.querySelector('.next-btn');
 
+// Set starting page numbers
+let currentPage = 1;
+let totalPages = 10;
+let visiblePages = 2;
+
 // Function to create the pagination elements with the given current page and total number of pages
-function createPagination(currentPage, totalPages) {
+function createPagination() {
   // Clear the pagination element's content
   pagination.innerHTML = '';
-
-  // Set the number of visible pages left and right of current page
-  let visiblePages = 2;
 
   // Calculate the start and end pages to be shown based on the current page and visible pages
   // As Current page is in the middle, Start and End Page are as follows:
@@ -34,36 +36,49 @@ function createPagination(currentPage, totalPages) {
   // Add the numbered page buttons
   for (let i = startPage; i <= endPage; i++) {
     // Add the active class to the current page button
+    // if on currentPage, add active class
+    // else blank
     const isActive = i === currentPage ? 'active' : '';
+    // add elements to pagination list
     pagination.innerHTML += `<li class="num ${isActive}">${i}</li>`;
   }
 
   // Add event listeners to the numbered page buttons to update the pagination on click
+  // Each click on number will create new pagination with number clicked as new current page
   pagination.querySelectorAll('.num').forEach(num => {
     num.addEventListener('click', () => {
-      createPagination(Number(num.textContent), totalPages);
+      currentPage = Number(num.textContent);
+      createPagination();
     });
   });
 
-  // Set event listeners for prev and next buttons
-  if (currentPage === 1) {
-    prevBtn.setAttribute('disabled', 'true');
-  } else {
-    prevBtn.removeAttribute('disabled');
-    prevBtn.addEventListener('click', () => {
-      createPagination(currentPage - 1, totalPages);
-    });
-  }
+  // Disable PREV and NEXT buttons when on 1st and last page
+  prevBtn.disabled = currentPage === 1;
+  nextBtn.disabled = currentPage === totalPages;
 
-  if (currentPage === totalPages) {
-    nextBtn.setAttribute('disabled', 'true');
-  } else {
-    nextBtn.removeAttribute('disabled');
-    nextBtn.addEventListener('click', () => {
-      createPagination(currentPage + 1, totalPages);
-    });
-  }
+  // Add event listeners for PREV and NEXT buttons
+  // Each click calls PREV nad NEXT btn functions
+  // Button click functions are called outside createPagination function...
+  // ... multiple fast clicks are adding event listeners to the PREV and NEXT buttons every time the createPagination function is called
+  // ... which can break code
+  prevBtn.addEventListener('click', onPrevBtnClick);
+  nextBtn.addEventListener('click', onNextBtnClick);
 }
 
-// Call the createPagination function with the initial values of 1 for the current page and 10 for the total number of pages
-createPagination(1, 10);
+// Click function for PREV button
+// Decreases current page by 1 and calls createPagination
+function onPrevBtnClick() {
+  currentPage--;
+  createPagination();
+}
+
+// Click function for NEXT button
+// Increases current page by 1 and calls createPagination
+function onNextBtnClick() {
+  currentPage++;
+  createPagination();
+}
+
+
+// Call the createPagination function with provided values for the current page and the total number of pages
+createPagination();
