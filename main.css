@@ -4,6 +4,14 @@
     box-sizing: border-box;
 }
 
+:root {
+    --primary-color: rgb(0, 173, 179);
+    --secondary-color: rgb(56, 252, 186);
+    --active-color: rgb(255, 186, 58);
+    --border-val: 3px solid white;
+}
+  
+
 body {
     display: flex;
     align-items: center;
@@ -13,24 +21,57 @@ body {
 
 .pagination-container {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    width: 400px;
+    height: 60px;
+    border-radius: 20px;
 }
 
 .pagination {
     display: flex;
 }
 
-.pagination li, span {
+.pagination > li {
     width: 50px;
     height: 50px;
     text-align: center;
-    line-height: 50px;
+    line-height: 44px;
     list-style: none;
-    background-color: aquamarine;
+    background-color: var(--secondary-color);
+    border: var(--border-val);
     border-radius: 50%;
     margin: 0 5px;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .pagination li.active {
-    background-color: orange;
+    background-color: var(--active-color);
+}
+
+.btn {
+    width: 46px;
+    height: 50px;
+    border: var(--border-val);
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.prev-btn {
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
+}
+
+.next-btn {
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+
+.btn:active {
+    background-color: var(--active-color);
 }
